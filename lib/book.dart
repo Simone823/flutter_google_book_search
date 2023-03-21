@@ -1,6 +1,6 @@
 // Classe book
 class Book {
-  // variabili
+  // variabili (late perchè essendo vuote le dichiari dopo)
   late String id;
   late String title;
   late String authors;
