@@ -22,7 +22,10 @@ class RootApp extends StatelessWidget {
     debugShowCheckedModeBanner: false,
       title: 'Ricerca Libri',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple, 
+          background: Colors.grey[700]
+        ),
         useMaterial3: true,
       ),
       home: const LibriScreen()
@@ -71,13 +74,13 @@ class _LibriScreenState extends State<LibriScreen> {
     // get data
     http.get(url).then((res) {
       // json decode
-      final resJson = jsonDecode(res.body);
+      final resJson = json.decode(res.body);
 
       // data res
       final data = resJson['items'];
 
       // libri
-      final books = data.map((book) => Book.fromMap(book)).toList();
+      final books = data.map<Book>((mappa) => Book.fromMap(mappa)).toList();
 
       // set state
       setState(() {
@@ -102,11 +105,27 @@ class _LibriScreenState extends State<LibriScreen> {
             fontWeight: FontWeight.bold
           )
         ),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.orange,
       ),
-      body: Container(
-        child: Text(result),
-      ),
+      body: ListView.builder(
+        itemCount: libri.length,
+        itemBuilder: (BuildContext context, int element) {
+          return Card(
+            elevation: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: ListTile(
+                // ignore: prefer_const_constructors
+                leading: CircleAvatar(
+                  backgroundColor: Colors.orange
+                ),
+                title: Text(libri[element].title),
+                subtitle: Text(libri[element].authors)
+              ),
+            ),
+          );
+        },
+      )
     );
   }
 }
