@@ -5,6 +5,7 @@ import 'dart:convert';
 
 // class
 import 'book.dart';
+import 'bookScreen.dart';
 //***************************************
 
 void main() {
@@ -51,18 +52,18 @@ class _LibriScreenState extends State<LibriScreen> {
   // widget ricerca
   Widget searchWidget = const Text('Libri');
 
+  // risultato
+  String result = "";
+
+  // libri
+  List<Book> libri = [];
+
   // init state
   @override
   void initState() {
     searchBooks('Php');
     super.initState();
   }
-
-  // risultato
-  String result = "";
-
-  // libri
-  List<Book> libri = [];
 
   // cerca libri
   Future searchBooks(String ricerca) async {
@@ -141,6 +142,10 @@ class _LibriScreenState extends State<LibriScreen> {
               padding: const EdgeInsets.all(8),
               child: ListTile(
                 // ignore: prefer_const_constructors
+                onTap: () {
+                  MaterialPageRoute route = MaterialPageRoute(builder: (_) => BookScreen(libri[element]));
+                  Navigator.push(context, route);
+                },
                 leading: Image.network(libri[element].image),
                 title: Text(libri[element].title),
                 subtitle: Text(libri[element].authors)
