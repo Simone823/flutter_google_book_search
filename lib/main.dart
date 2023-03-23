@@ -44,6 +44,12 @@ class LibriScreen extends StatefulWidget {
 }
 
 class _LibriScreenState extends State<LibriScreen> {
+  // icona ricerca
+  Icon iconSearch = const Icon(Icons.search);
+
+  // widget ricerca
+  Widget searchWidget = const Text('Libri');
+
   // init state
   @override
   void initState() {
@@ -99,13 +105,27 @@ class _LibriScreenState extends State<LibriScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Libri',
-          style: TextStyle(
-            fontWeight: FontWeight.bold
-          )
-        ),
         backgroundColor: Colors.orange,
+        title: searchWidget,
+        actions: [
+          IconButton(icon: iconSearch, onPressed: () {
+            setState(() {
+              if(iconSearch.icon == Icons.search) {
+                iconSearch = const Icon(Icons.cancel);
+                searchWidget = TextField(
+                  onSubmitted: (value) => searchBooks(value),
+                  textInputAction: TextInputAction.search,
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                );
+              } else {
+                setState(() {
+                  iconSearch = const Icon(Icons.search);
+                  searchWidget = const Text('Libri');
+                });
+              }
+            });
+          })
+        ]
       ),
       body: ListView.builder(
         itemCount: libri.length,
@@ -113,7 +133,7 @@ class _LibriScreenState extends State<LibriScreen> {
           return Card(
             elevation: 3,
             child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(8),
               child: ListTile(
                 // ignore: prefer_const_constructors
                 leading: CircleAvatar(
