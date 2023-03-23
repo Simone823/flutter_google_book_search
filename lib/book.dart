@@ -25,6 +25,11 @@ class Book {
     authors = el['volumeInfo']['authors'] == null ? '' : el['volumeInfo']['authors'].toString();
     description = el['volumeInfo']['description'] == null ? '' : el['volumeInfo']['description'].toString();
     editor = el['volumeInfo']['publisher'] == null ? '' : el['volumeInfo']['publisher'].toString();
-    // image = el['volumeInfo']['imageLinks']['smallThumbnail'] == null ? '' : el['volumeInfo']['imageLinks']['smallThumbnail'].toString();
+    
+    try {
+      image = el['volumeInfo']['imageLinks']['smallThumbnail'] == null ? '' : el['volumeInfo']['imageLinks']['smallThumbnail'].toString();
+    } catch (error) {
+      image = '';
+    }
   }
 }

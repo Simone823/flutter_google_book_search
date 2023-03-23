@@ -1,10 +1,11 @@
-// IMPORTS
+//* IMPORTS
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-// lib
+// class
 import 'book.dart';
+//***************************************
 
 void main() {
   runApp(const RootApp());
@@ -53,7 +54,7 @@ class _LibriScreenState extends State<LibriScreen> {
   // init state
   @override
   void initState() {
-    searchBooks('Oceano Mare');
+    searchBooks('Php');
     super.initState();
   }
 
@@ -77,27 +78,33 @@ class _LibriScreenState extends State<LibriScreen> {
     // url finale
     final Uri url = Uri.https(dominio, percorso, params);
 
-    // get data
-    http.get(url).then((res) {
-      // json decode
-      final resJson = json.decode(res.body);
+    try {
+      // get data
+      http.get(url).then((res) {
+        // json decode
+        final resJson = json.decode(res.body);
 
-      // data res
-      final data = resJson['items'];
+        // data res
+        final data = resJson['items'];
 
-      // libri
-      final books = data.map<Book>((mappa) => Book.fromMap(mappa)).toList();
+        // libri
+        final books = data.map<Book>((mappa) => Book.fromMap(mappa)).toList();
 
-      // set state
-      setState(() {
-        result = res.body;
-        libri = books;
+        // set state
+        setState(() {
+          result = res.body;
+          libri = books;
+        });
       });
-    });
 
-    setState(() {
-      result = 'Richiesta in corso';
-    });
+      setState(() {
+        result = 'Richiesta in corso';
+      });
+    } catch (error) {
+      setState(() {
+        result = '';
+      });
+    }
   }
 
   // cosa visualizzare nell'interfaccia grafica
@@ -118,10 +125,8 @@ class _LibriScreenState extends State<LibriScreen> {
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 );
               } else {
-                setState(() {
-                  iconSearch = const Icon(Icons.search);
-                  searchWidget = const Text('Libri');
-                });
+                iconSearch = const Icon(Icons.search);
+                searchWidget = const Text('Libri');
               }
             });
           })
@@ -136,9 +141,7 @@ class _LibriScreenState extends State<LibriScreen> {
               padding: const EdgeInsets.all(8),
               child: ListTile(
                 // ignore: prefer_const_constructors
-                leading: CircleAvatar(
-                  backgroundColor: Colors.orange
-                ),
+                leading: Image.network(libri[element].image),
                 title: Text(libri[element].title),
                 subtitle: Text(libri[element].authors)
               ),
